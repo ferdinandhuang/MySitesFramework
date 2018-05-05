@@ -23,9 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySites.IServices", "MySite
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySites.Services", "MySites.Services\MySites.Services.csproj", "{045B4AA8-5042-4036-A262-2067985E630B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySites.Repositories", "MySites.Repositories\MySites.Repositories.csproj", "{637C38C9-1996-45E1-9186-2FD24B988CDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySites.Repositories", "MySites.Repositories\MySites.Repositories.csproj", "{637C38C9-1996-45E1-9186-2FD24B988CDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySites.IRepositories", "MySites.IRepositories\MySites.IRepositories.csproj", "{189DA889-C3DB-4BAF-8E64-5BB717FFB14F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySites.IRepositories", "MySites.IRepositories\MySites.IRepositories.csproj", "{189DA889-C3DB-4BAF-8E64-5BB717FFB14F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "06.Common", "06.Common", "{7448DFC4-A031-4A25-B74B-7917CD5B8BF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySites.Common", "MySites.Common\MySites.Common.csproj", "{EDE02657-55C8-487A-AD47-E435F7DFB6C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +65,10 @@ Global
 		{189DA889-C3DB-4BAF-8E64-5BB717FFB14F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{189DA889-C3DB-4BAF-8E64-5BB717FFB14F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{189DA889-C3DB-4BAF-8E64-5BB717FFB14F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDE02657-55C8-487A-AD47-E435F7DFB6C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE02657-55C8-487A-AD47-E435F7DFB6C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE02657-55C8-487A-AD47-E435F7DFB6C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE02657-55C8-487A-AD47-E435F7DFB6C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +81,7 @@ Global
 		{045B4AA8-5042-4036-A262-2067985E630B} = {B1A7436B-8D20-41D0-9516-DD52BB8D3933}
 		{637C38C9-1996-45E1-9186-2FD24B988CDD} = {0B95A718-2AB2-4DAA-B3A5-DAF42F6019C1}
 		{189DA889-C3DB-4BAF-8E64-5BB717FFB14F} = {0B95A718-2AB2-4DAA-B3A5-DAF42F6019C1}
+		{EDE02657-55C8-487A-AD47-E435F7DFB6C6} = {7448DFC4-A031-4A25-B74B-7917CD5B8BF8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E748B06-D48D-40A3-8024-A439C01011DC}
