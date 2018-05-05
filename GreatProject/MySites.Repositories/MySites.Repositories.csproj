@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+    <ProjectReference Include="..\MySites.DataModels\MySites.DataModels.csproj" />
+    <ProjectReference Include="..\MySites.IRepositories\MySites.IRepositories.csproj" />
+  </ItemGroup>
+
+</Project>
