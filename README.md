@@ -1,3 +1,2 @@
-# MySitesFramework
+# dotNetCore快速开发框架
 
-Framework
