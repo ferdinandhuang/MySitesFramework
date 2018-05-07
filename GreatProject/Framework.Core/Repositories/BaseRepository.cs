@@ -231,7 +231,7 @@ namespace Framework.Core.Repositories
         public IQueryProvider Provider => DbSet.AsQueryable().Provider;
 
         #region IDisposable Support
-        private bool disposedValue = false; // 要检测冗余调用
+        private bool disposedValue = true; // 要检测冗余调用
 
         protected virtual void Dispose(bool disposing)
         {
