@@ -12,7 +12,7 @@
     <PackageReference Include="AspectCore.APM.ApplicationProfiler" Version="0.1.4" />
     <PackageReference Include="AspectCore.APM.AspNetCore" Version="0.1.4" />
     <PackageReference Include="AspectCore.APM.LineProtocolCollector" Version="0.1.4" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
     <PackageReference Include="Butterfly.Client.AspNetCore" Version="0.0.8" />
   </ItemGroup>
 
@@ -22,6 +22,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+    <ProjectReference Include="..\Framework.WebApi\Framework.WebApi.csproj" />
+    <ProjectReference Include="..\MySites.Common\MySites.Common.csproj" />
     <ProjectReference Include="..\MySites.DataModels\MySites.DataModels.csproj" />
     <ProjectReference Include="..\MySites.IRepositories\MySites.IRepositories.csproj" />
     <ProjectReference Include="..\MySites.IServices\MySites.IServices.csproj" />

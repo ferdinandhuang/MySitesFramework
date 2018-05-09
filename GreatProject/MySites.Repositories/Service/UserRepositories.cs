@@ -19,7 +19,7 @@ namespace MySites.Repositories.Service
             {
 
                 await entry.Context.SaveChangesWithTriggersAsync(entry.Context.SaveChangesAsync);
-                await DistributedCacheManager.RemoveAsync("Redis_Cache_SysMenu");//插入成功后清除缓存以更新
+                await DistributedCacheManager.RemoveAsync("Redis_Cache_User");//插入成功后清除缓存以更新
             };
             //修改时触发
             Triggers<User>.Updating += entry =>
@@ -38,6 +38,7 @@ namespace MySites.Repositories.Service
             };
 
             var a = GetSingle("");
+            var b = Add(user);
         }
     }
 }

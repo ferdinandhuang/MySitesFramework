@@ -18,6 +18,9 @@ using Framework.Core.Options;
 using Framework.Core.Extensions;
 using Framework.Core.DbContextCore.CodeFirst;
 using Framework.Core.Filters;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Framework.WebApi.Filters;
 
 namespace MySites.Website
 {
@@ -39,6 +42,14 @@ namespace MySites.Website
         public void ConfigureServices(IServiceCollection services)
         {
             InitIoC(services);
+
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                 .RequireAuthenticatedUser()
+                                 .Build();
+                config.Filters.Add(new ApiAuthorizeFilter(policy));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,18 +62,18 @@ namespace MySites.Website
 
             app.UseMvc();
 
-            //Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            //app.UseHttpProfiler();      //启动Http请求监控
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //    app.UseBrowserLink();
-            //}
-            //else
-            //{
-            //    app.UseExceptionHandler("/Home/Error");
-            //}
-            //app.UseStaticFiles();
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            app.UseHttpProfiler();      //启动Http请求监控
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+            app.UseStaticFiles();
             //app.UseMvc(routes =>
             //{
             //    routes.MapRoute(
@@ -74,7 +85,7 @@ namespace MySites.Website
         private IServiceProvider InitIoC(IServiceCollection services)
         {
             //database connectionstring
-            var dbConnectionString = Configuration.GetConnectionString("MySql");
+            var dbConnectionString = Configuration.GetConnectionString("MsSqlServer");
 
             #region Redis
 
@@ -112,7 +123,7 @@ namespace MySites.Website
             #region 各种注入
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
-                .AddSingleton<IDbContextCore, MySqlDbContext>()//注入EF上下文
+                .AddSingleton<IDbContextCore, SqlServerDbContext>()//注入EF上下文
                 .AddScopedAssembly("MySites.IServices", "MySites.Services")//注入服务
                 .AddScopedAssembly("MySites.IRepositories", "MySites.Repositories");//注入服务
             services.AddMvc(option =>

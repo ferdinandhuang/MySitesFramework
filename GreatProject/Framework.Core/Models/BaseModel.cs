@@ -19,8 +19,8 @@ namespace Framework.Core.Models
         {
             Id = CommonHelper.NewMongodbId().ToString();
             Flag = Flag.Normal;
-            CreateTime = DateTime.Now;
-            UpdateTime = DateTime.Now;
+            CreateTime = DateHelper.GetTimeStamp().ToString();
+            UpdateTime = DateHelper.GetTimeStamp().ToString();
             CreateUser = "-";
             UpdateUser = "-";
         }
@@ -38,7 +38,7 @@ namespace Framework.Core.Models
         /// <summary>
         /// 创建日期
         /// </summary>
-        public DateTime CreateTime { get; set; }
+        public string CreateTime { get; set; }
 
         /// <summary>
         /// 创建人
@@ -48,7 +48,7 @@ namespace Framework.Core.Models
         /// <summary>
         /// 更新日期
         /// </summary>
-        public DateTime UpdateTime { get; set; }
+        public string UpdateTime { get; set; }
 
         /// <summary>
         /// 更新人
