@@ -1,4 +1,5 @@
 ﻿using Framework.Core.Common;
+using Framework.Core.Helpers;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,7 +17,7 @@ namespace Framework.Core.Models
     {
         public BaseModel()
         {
-            Id = new Guid().ToString();
+            Id = CommonHelper.NewMongodbId().ToString();
             Flag = Flag.Normal;
             CreateTime = DateTime.Now;
             UpdateTime = DateTime.Now;
