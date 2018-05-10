@@ -25,8 +25,8 @@ namespace MySites.Web
                 .Build();
 
             return WebHost.CreateDefaultBuilder(args)
-                    .UseStartup<Startup>()
                     .UseConfiguration(config)
+                    .UseStartup<Startup>()
                     .Build();
         }
     }
