@@ -25,6 +25,7 @@ namespace MySites.Web
                 .Build();
 
             return WebHost.CreateDefaultBuilder(args)
+                    .UseUrls("http://*:5001")
                     .UseConfiguration(config)
                     .UseStartup<Startup>()
                     .Build();
