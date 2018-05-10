@@ -25,7 +25,7 @@ namespace MySites.Web
                 .Build();
 
             return WebHost.CreateDefaultBuilder(args)
-                    .UseConfiguration(config)
+                    .UseUrls("http://localhost:5001")
                     .UseStartup<Startup>()
                     .Build();
         }
