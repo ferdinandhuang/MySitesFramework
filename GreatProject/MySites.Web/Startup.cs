@@ -56,7 +56,7 @@ namespace MySites.Web
             });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                        .AddCookie(o => o.LoginPath = new PathString("/api/values"));
+                        .AddCookie(o => o.LoginPath = new PathString("/Login"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,14 +81,14 @@ namespace MySites.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Login}/{action=Index}/{id?}");
             });
         }
 
         private IServiceProvider InitIoC(IServiceCollection services)
         {
             //database connectionstring
-            var dbConnectionString = Configuration.GetConnectionString("MsSqlServer");
+            var dbConnectionString = Configuration.GetConnectionString("SQLConnection");
 
             #region Redis
 
@@ -126,7 +126,7 @@ namespace MySites.Web
             #region 各种注入
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
-                .AddSingleton<IDbContextCore, SqlServerDbContext>()//注入EF上下文
+                .AddSingleton<IDbContextCore, MySqlDbContext>()//注入EF上下文
                 .AddScopedAssembly("MySites.IServices", "MySites.Services")//注入服务
                 .AddScopedAssembly("MySites.IRepositories", "MySites.Repositories");//注入服务
             services.AddMvc(option =>
