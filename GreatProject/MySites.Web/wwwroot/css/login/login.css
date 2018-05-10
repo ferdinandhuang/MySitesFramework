@@ -1,14 +1,15 @@
 ﻿body {
-    background: url('../../images/image-gallery/11.jpg') no-repeat center center fixed;
+    background: url('../../images/image-gallery/11.jpg') no-repeat center center;
     background-size: cover;
 }
 
 .card{
     opacity: 0.9;
+    z-index: 5;
 }
 
 .beiAnFooter {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     height: 50px;
     width: 100%;
