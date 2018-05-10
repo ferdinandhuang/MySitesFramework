@@ -37,7 +37,7 @@ namespace Framework.WebApi.Filters
             }
             catch (Exception ex)
             {
-                return null;
+
             }
             return base.OnAuthorizationAsync(context);
         }

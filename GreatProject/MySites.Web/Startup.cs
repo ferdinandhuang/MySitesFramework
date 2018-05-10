@@ -21,8 +21,12 @@ using Framework.Core.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Framework.WebApi.Filters;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace MySites.Website
+namespace MySites.Web
 {
     public class Startup
     {
@@ -50,20 +54,16 @@ namespace MySites.Website
                                  .Build();
                 config.Filters.Add(new ApiAuthorizeFilter(policy));
             });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                        .AddCookie(o => o.LoginPath = new PathString("/api/values"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseMvc();
-
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            app.UseHttpProfiler();      //启动Http请求监控
+            //app.UseHttpProfiler();      //启动Http请求监控
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -74,12 +74,15 @@ namespace MySites.Website
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
-            //});
+
+            app.UseAuthentication();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
 
         private IServiceProvider InitIoC(IServiceCollection services)
@@ -94,11 +97,11 @@ namespace MySites.Website
             services.AddDistributedRedisCache(option =>
             {
                 option.Configuration = redisConnectionString;//redis连接字符串
-                option.InstanceName = "sample";//Redis实例名称
+                option.InstanceName = "mysites";//Redis实例名称
             });
             //全局设置Redis缓存有效时间为5分钟。
-            //services.Configure<DistributedCacheEntryOptions>(option =>
-            //    option.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5));
+            services.Configure<DistributedCacheEntryOptions>(option =>
+                option.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5));
 
             #endregion
 
@@ -119,7 +122,7 @@ namespace MySites.Website
             });
 
             #endregion
-            
+
             #region 各种注入
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
