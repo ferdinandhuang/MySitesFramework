@@ -1,5 +1,9 @@
-﻿body {
-    background: url('../../images/image-gallery/11.jpg') no-repeat center center;
+﻿html {
+    height: 100%;
+}
+
+body {
+    background: url('../../images/image-gallery/11.jpg') no-repeat center center fixed;
     background-size: cover;
 }
 
