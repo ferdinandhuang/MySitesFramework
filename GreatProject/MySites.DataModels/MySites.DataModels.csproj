@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+    <ProjectReference Include="..\MySites.Common\MySites.Common.csproj" />
   </ItemGroup>
 
 </Project>

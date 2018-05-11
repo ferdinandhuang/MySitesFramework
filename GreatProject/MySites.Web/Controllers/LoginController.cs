@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Framework.WebApi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MySites.DTO;
 using MySites.Web.Models;
 
 namespace MySites.Web.Controllers
@@ -26,9 +27,12 @@ namespace MySites.Web.Controllers
         /// <summary>
         /// 登陆
         /// </summary>
-        private void Login()
+        [HttpPost]
+        [AllowAnonymous]
+        public string Login(LoginUser loginUser)
         {
-
+            System.Threading.Thread.Sleep(2000);
+            return "aaaaa";
         }
     }
 }

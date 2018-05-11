@@ -13,6 +13,12 @@
     <!-- webapp 模式-->
     <meta name="apple-mobile-web-app-capable" content="yes" />
 
+    <!-- ios webapp图标名称 -->
+    <meta name="apple-mobile-web-app-title" content="佩佩的博客" />
+
+    <!-- webapp图标 -->
+    <link rel="apple-touch-icon-precomposed" href="~/images/wa.jpg">
+
     <!-- webapp模式下，改变顶部状态条的颜色。-->
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
@@ -55,14 +61,14 @@
         </div>
         <div class="card">
             <div class="body">
-                <form id="sign_in" method="POST">
+                <form id="sign_in">
                     <div class="msg">搞快登陆</div>
                     <div class="input-group">
                         <span class="input-group-addon">
                             <i class="material-icons">person</i>
                         </span>
                         <div class="form-line">
-                            <input type="text" class="form-control" name="username" placeholder="用户名" required autofocus>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="用户名" required autofocus>
                         </div>
                     </div>
                     <div class="input-group">
@@ -70,7 +76,7 @@
                             <i class="material-icons">lock</i>
                         </span>
                         <div class="form-line">
-                            <input type="password" class="form-control" name="password" placeholder="密码" required>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="密码" required>
                         </div>
                     </div>
                     <div class="row">
@@ -79,7 +85,7 @@
                             <label for="rememberme">记住我</label>
                         </div>
                         <div class="col-xs-4">
-                            <button class="btn btn-block bg-pink waves-effect" type="submit">登陆</button>
+                            <input class="btn btn-block bg-pink waves-effect" id="submit" type="button" value="登陆">
                         </div>
                     </div>
                     <div class="row m-t-15 m-b--20">
@@ -103,6 +109,10 @@
 
     <!-- Jquery Core Js -->
     <script src="../../lib/jquery/dist/jquery.js"></script>
+    <script src="~/plugins/jquery-cookie/jquery.cookie.js"></script>
+
+    <!-- sha256 -->
+    <script src="~/lib/sha256.min.js"></script>
 
     <!-- Bootstrap Core Js -->
     <script src="../../lib/bootstrap/dist/js/bootstrap.js"></script>
@@ -114,6 +124,7 @@
     <script src="../../lib/jquery-validation/dist/jquery.validate.js"></script>
 
     <!-- Custom Js -->
+    <script src="~/js/overall.js"></script>
     <script src="../../js/admin.js"></script>
     <script src="../../js/login/login.js"></script>
 </body>
