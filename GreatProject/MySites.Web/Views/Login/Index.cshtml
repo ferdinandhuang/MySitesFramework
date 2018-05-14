@@ -1,0 +1,140 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <!-- webapp 模式-->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <!-- ios webapp图标名称 -->
+    <meta name="apple-mobile-web-app-title" content="佩佩的博客" />
+
+    <!-- webapp图标 -->
+    <link rel="apple-touch-icon-precomposed" href="~/images/wa.jpg">
+
+    <!-- webapp模式下，改变顶部状态条的颜色。-->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <!-- 添加到主屏幕“后，全屏显示-->
+    <meta name="apple-touch-fullscreen" content="yes">
+
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telephone=no, email=no" />
+
+    <!-- 控制选项卡颜色-->
+    <meta name="theme-color" content="#cddc39">
+
+    <title>登陆</title>
+    <!-- Favicon-->
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+
+    <!-- Waves Effect Css -->
+    <link href="~/plugins/node-waves/waves.css" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="~/plugins/animate-css/animate.css" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="~/css/style.css?v20180510" rel="stylesheet">
+
+    <!-- Own Page Css -->
+    <link href="~/css/login/login.css" rel="stylesheet" />
+</head>
+
+<body class="login-page">
+    <div class="login-box">
+        <div class="logo">
+            <a>呀哈哈</a>
+        </div>
+        <div class="card">
+            <div class="body">
+                <form id="sign_in">
+                    <div class="msg">搞快登陆</div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="用户名" required autofocus>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="密码" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8 p-t-5">
+                            <input type="checkbox" name="rememberme" id="rememberme" class="filled-in chk-col-pink">
+                            <label for="rememberme">记住我</label>
+                        </div>
+                        <div class="col-xs-4">
+                            <input class="btn btn-block bg-pink waves-effect" id="submit" type="button" value="登陆">
+                        </div>
+                    </div>
+                    <div class="row m-t-15 m-b--20">
+                        <div class="col-xs-6">
+                            <a href="sign-up.html">注册！</a>
+                        </div>
+                        <div class="col-xs-6 align-right">
+                            <a href="forgot-password.html">搞忘密码咯？</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="beiAnFooter">
+        <span>
+            <a href="http://www.miitbeian.gov.cn/">蜀ICP备18012378号</a>
+        </span>
+    </div>
+
+    <!-- Jquery Core Js -->
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/plugins/jquery-cookie/jquery.cookie.js"></script>
+
+    <!-- sha256 -->
+    <script src="~/lib/sha256.min.js"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="~/plugins/node-waves/waves.js"></script>
+
+    <!-- Validation Plugin Js -->
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+
+    <environment include="Development">
+        <!-- Custom Js -->
+        <script src="~/js/overall.js" asp-append-version="true"></script>
+        <script src="~/js/admin.js"></script>
+        <script src="~/js/login/login.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <!-- Custom Js -->
+        <script src="~/js/overall.js" asp-append-version="true"></script>
+        <script src="~/js/admin.js"></script>
+        <script src="~/js/login/login.min.js" asp-append-version="true"></script>
+    </environment>
+</body>
+
+</html>

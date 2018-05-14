@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+    <ProjectReference Include="..\MySites.Common\MySites.Common.csproj" />
+    <ProjectReference Include="..\MySites.DataModels\MySites.DataModels.csproj" />
+    <ProjectReference Include="..\MySites.DTO\MySites.DTO.csproj" />
+    <ProjectReference Include="..\MySites.IRepositories\MySites.IRepositories.csproj" />
     <ProjectReference Include="..\MySites.IServices\MySites.IServices.csproj" />
+    <ProjectReference Include="..\MySites.Repositories\MySites.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

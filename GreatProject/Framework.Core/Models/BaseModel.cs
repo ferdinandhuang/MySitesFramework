@@ -1,4 +1,5 @@
 ﻿using Framework.Core.Common;
+using Framework.Core.Helpers;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,10 +17,10 @@ namespace Framework.Core.Models
     {
         public BaseModel()
         {
-            Id = new Guid().ToString();
+            Id = CommonHelper.NewMongodbId().ToString();
             Flag = Flag.Normal;
-            CreateTime = DateTime.Now;
-            UpdateTime = DateTime.Now;
+            CreateTime = DateHelper.GetTimeStamp().ToString();
+            UpdateTime = DateHelper.GetTimeStamp().ToString();
             CreateUser = "-";
             UpdateUser = "-";
         }
@@ -37,7 +38,7 @@ namespace Framework.Core.Models
         /// <summary>
         /// 创建日期
         /// </summary>
-        public DateTime CreateTime { get; set; }
+        public string CreateTime { get; set; }
 
         /// <summary>
         /// 创建人
@@ -47,7 +48,7 @@ namespace Framework.Core.Models
         /// <summary>
         /// 更新日期
         /// </summary>
-        public DateTime UpdateTime { get; set; }
+        public string UpdateTime { get; set; }
 
         /// <summary>
         /// 更新人
