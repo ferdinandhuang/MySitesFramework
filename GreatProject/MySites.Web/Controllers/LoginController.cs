@@ -21,6 +21,11 @@ namespace MySites.Web.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            //登录授权直接跳转Home
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 

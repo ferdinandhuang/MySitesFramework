@@ -28,7 +28,7 @@ namespace Framework.WebApi.Filters
                     //return base.OnAuthorizationAsync(context);
                 }
 
-                var token =context.HttpContext.Request.Headers["DangguiToken"];
+                var token =context.HttpContext.Request.Headers["dangguitoken"];
                 //不带Token
                 if (String.IsNullOrEmpty(token))
                 {

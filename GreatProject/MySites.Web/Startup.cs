@@ -87,9 +87,6 @@ namespace MySites.Web
 
         private IServiceProvider InitIoC(IServiceCollection services)
         {
-            //database connectionstring
-            var dbConnectionString = Configuration.GetConnectionString("SQLConnection");
-
             #region Redis
 
             var redisConnectionString = Configuration.GetConnectionString("Redis");
@@ -114,6 +111,8 @@ namespace MySites.Web
 
             #region 配置DbContextOption
 
+            //database connectionstring
+            var dbConnectionString = Configuration.GetConnectionString("DataBase");//连接字符串
             //配置DbContextOption
             services.Configure<DbContextOption>(options =>
             {
@@ -123,10 +122,21 @@ namespace MySites.Web
 
             #endregion
 
+            #region Database
+            var dataBaseType = Configuration.GetConnectionString("DataBaseType");//数据库类型
+            if (dataBaseType == "MsSqlServer")
+            {
+                services.AddSingleton<IDbContextCore, SqlServerDbContext>();//注入EF上下文
+            }
+            else if (dataBaseType == "MySql")
+            {
+                services.AddSingleton<IDbContextCore, MySqlDbContext>();//注入EF上下文
+            }
+            #endregion
+
             #region 各种注入
 
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
-                .AddSingleton<IDbContextCore, MySqlDbContext>()//注入EF上下文
                 .AddScopedAssembly("MySites.IServices", "MySites.Services")//注入服务
                 .AddScopedAssembly("MySites.IRepositories", "MySites.Repositories");//注入服务
             services.AddMvc(option =>

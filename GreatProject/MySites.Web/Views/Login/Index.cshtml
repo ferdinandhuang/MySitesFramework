@@ -39,19 +39,19 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap Core Css -->
-    <link href="../../lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
 
     <!-- Waves Effect Css -->
-    <link href="../../plugins/node-waves/waves.css" rel="stylesheet" />
+    <link href="~/plugins/node-waves/waves.css" rel="stylesheet" />
 
     <!-- Animation Css -->
-    <link href="../../plugins/animate-css/animate.css" rel="stylesheet" />
+    <link href="~/plugins/animate-css/animate.css" rel="stylesheet" />
 
     <!-- Custom Css -->
-    <link href="../../css/style.css?v20180510" rel="stylesheet">
+    <link href="~/css/style.css?v20180510" rel="stylesheet">
 
     <!-- Own Page Css -->
-    <link href="../../css/login/login.css" rel="stylesheet" />
+    <link href="~/css/login/login.css" rel="stylesheet" />
 </head>
 
 <body class="login-page">
@@ -108,25 +108,33 @@
     </div>
 
     <!-- Jquery Core Js -->
-    <script src="../../lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/plugins/jquery-cookie/jquery.cookie.js"></script>
 
     <!-- sha256 -->
     <script src="~/lib/sha256.min.js"></script>
 
     <!-- Bootstrap Core Js -->
-    <script src="../../lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 
     <!-- Waves Effect Plugin Js -->
-    <script src="../../plugins/node-waves/waves.js"></script>
+    <script src="~/plugins/node-waves/waves.js"></script>
 
     <!-- Validation Plugin Js -->
-    <script src="../../lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 
-    <!-- Custom Js -->
-    <script src="~/js/overall.js"></script>
-    <script src="../../js/admin.js"></script>
-    <script src="../../js/login/login.js"></script>
+    <environment include="Development">
+        <!-- Custom Js -->
+        <script src="~/js/overall.js" asp-append-version="true"></script>
+        <script src="~/js/admin.js"></script>
+        <script src="~/js/login/login.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <!-- Custom Js -->
+        <script src="~/js/overall.js" asp-append-version="true"></script>
+        <script src="~/js/admin.js"></script>
+        <script src="~/js/login/login.min.js" asp-append-version="true"></script>
+    </environment>
 </body>
 
 </html>

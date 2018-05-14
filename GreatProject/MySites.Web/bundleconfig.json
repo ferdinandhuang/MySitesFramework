@@ -19,6 +19,29 @@
       "renameLocals": true
     },
     // Optionally generate .map file
-    "sourceMap": false
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  //登录页面
+  {
+    "outputFileName": "wwwroot/css/login/login.min.css",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "wwwroot/css/login/login.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/login/login.min.js",
+    "inputFiles": [
+      "wwwroot/js/login/login.js"
+    ],
+    // Optionally specify minification options
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    // Optionally generate .map file
+    "sourceMap": false,
+    "includeInProject": true
   }
 ]
