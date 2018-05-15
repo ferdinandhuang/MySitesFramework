@@ -25,14 +25,14 @@ namespace Framework.WebApi.Filters
                 //是匿名用户，则继续执行；非匿名用户，抛出“未授权访问”信息
                 if (isAnonymous)
                 {
-                    //return base.OnAuthorizationAsync(context);
+                    return base.OnAuthorizationAsync(context);
                 }
 
                 var token =context.HttpContext.Request.Headers["dangguitoken"];
                 //不带Token
                 if (String.IsNullOrEmpty(token))
                 {
-
+                    return base.OnAuthorizationAsync(context);
                 }
             }
             catch (Exception ex)

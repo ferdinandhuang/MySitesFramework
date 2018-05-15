@@ -10,6 +10,7 @@
     <PackageReference Include="AspectCore.Extensions.Autofac" Version="0.3.1" />
     <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="0.3.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
+    <PackageReference Include="BCrypt.Net-Core" Version="1.4.0" />
     <PackageReference Include="DotNetCore.NPOI" Version="1.0.2" />
     <PackageReference Include="EntityFrameworkCore.Triggers" Version="1.1.1" />
     <PackageReference Include="Jil" Version="2.15.4" />

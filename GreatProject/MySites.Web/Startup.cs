@@ -47,16 +47,18 @@ namespace MySites.Web
         {
             InitIoC(services);
 
-            services.AddMvc(config =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                                 .RequireAuthenticatedUser()
-                                 .Build();
-                config.Filters.Add(new ApiAuthorizeFilter(policy));
-            });
+            services.AddMvcCore()
+                .AddAuthorization()
+                .AddJsonFormatters();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                        .AddCookie(o => o.LoginPath = new PathString("/Login"));
+            services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "http://localhost:5002";
+                    options.RequireHttpsMetadata = false;
+
+                    options.ApiName = "api1";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -122,7 +124,7 @@ namespace MySites.Web
 
             #endregion
 
-            #region Database
+            #region 注入Database
             var dataBaseType = Configuration.GetConnectionString("DataBaseType");//数据库类型
             if (dataBaseType == "MsSqlServer")
             {
@@ -131,6 +133,10 @@ namespace MySites.Web
             else if (dataBaseType == "MySql")
             {
                 services.AddSingleton<IDbContextCore, MySqlDbContext>();//注入EF上下文
+            }
+            else
+            {
+                throw new Exception("未能找到相应的数据库连接！");
             }
             #endregion
 
@@ -141,7 +147,11 @@ namespace MySites.Web
                 .AddScopedAssembly("MySites.IRepositories", "MySites.Repositories");//注入服务
             services.AddMvc(option =>
             {
+                var policy = new AuthorizationPolicyBuilder()
+                                 .RequireAuthenticatedUser()
+                                 .Build();
                 option.Filters.Add(new GlobalExceptionFilter());
+                option.Filters.Add(new ApiAuthorizeFilter(policy));
             })
                 .AddControllersAsServices();
 

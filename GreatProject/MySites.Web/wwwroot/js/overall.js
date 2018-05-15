@@ -33,6 +33,12 @@ $(function () {
             }
         },
         statusCode: {
+            401: function () {
+                window.location.replace("/login");
+            },
+            403: function () {
+                window.location.replace("/login");
+            },
             404: function () {
                 alert('数据获取/输入失败，没有此服务。404');
             },
