@@ -2,17 +2,17 @@
 $(function () {
     $.ajaxSetup({
         contentType: "application/x-www-form-urlencoded;charset=utf-8",
-        headers: {
-            'dangguitoken': $.cookie('dangguitoken')
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', localStorage.dangguitoken);
         },
         complete: function (XMLHttpRequest, textStatus) {
             //通过XMLHttpRequest取得响应头:token
-            var dangguitoken = XMLHttpRequest.getResponseHeader("dangguitoken");
+            var dangguitoken = XMLHttpRequest.getResponseHeader("Authorization");
             if (dangguitoken == undefined) {
                 window.location.replace("/login");
             }
             else {
-                $.cookie('dangguitoken', dangguitoken, { expires: 0.5 });
+                localStorage.dangguitoken = dangguitoken;
             }
 
             //通过XMLHttpRequest获取响应结果

@@ -23,6 +23,7 @@ $(function () {
 });
 
 $(function () {
+    //µÇÂ½
     $('#submit').click(function () {
         if ($('#sign_in').valid()) {
             var username = $('#username').val();
@@ -45,5 +46,12 @@ $(function () {
                 alert(data, 123);
             }, JSON);
         }
+    });
+
+    //
+    $('#forget').click(function () {
+            $.post('/Login/wawa', function (data) {
+
+            }, JSON);
     });
 });

@@ -25,6 +25,8 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Cryptography.X509Certificates;
+using System.IO;
 
 namespace MySites.Web
 {
@@ -45,20 +47,22 @@ namespace MySites.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            InitIoC(services);
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                 .RequireAuthenticatedUser()
+                                 .Build();
+                config.Filters.Add(new ApiAuthorizeFilter(policy));
+            });
 
-            services.AddMvcCore()
-                .AddAuthorization()
-                .AddJsonFormatters();
-
-            services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = "http://localhost:5002";
-                    options.RequireHttpsMetadata = false;
-
-                    options.ApiName = "api1";
+            services.AddAuthentication("Bearer")//添加授权模式
+                .AddIdentityServerAuthentication(Options => {
+                    Options.Authority = "http://localhost:6001";//授权服务器地址
+                    Options.RequireHttpsMetadata = false;//是否是https
+                    Options.ApiName = "api";
                 });
+
+            InitIoC(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

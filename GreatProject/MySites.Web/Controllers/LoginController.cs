@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Framework.WebApi;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySites.DTO;
@@ -39,8 +40,8 @@ namespace MySites.Web.Controllers
         [AllowAnonymous]
         public string Login(LoginUser loginUser)
         {
-            System.Threading.Thread.Sleep(2000);
-            return "aaaaa";
+            var a = Test();
+            return a.ToString();
         }
 
         /// <summary>
@@ -53,42 +54,49 @@ namespace MySites.Web.Controllers
         {
             return View();
         }
-        [AllowAnonymous]
-        public async Task<JsonResult> Test()
-        {
-            // discover endpoints from metadata
-            var disco = await DiscoveryClient.GetAsync("http://localhost:5002");
-            if (disco.IsError)
-            {
-                Console.WriteLine(disco.Error);
-            }
 
-            // request token
-            var tokenClient = new TokenClient(disco.TokenEndpoint, "client", "secret");
-            var tokenResponse = await tokenClient.RequestClientCredentialsAsync("api1");
+        [HttpPost]
+        public string wawa()
+        {
+            string a = "12312123";
+            return a;
+        }
+
+        private async Task<string> Test()
+        {
+            var dico = DiscoveryClient.GetAsync("http://localhost:6001").Result;
+
+            //token
+            var tokenClient = new TokenClient(dico.TokenEndpoint, "DangguiSite", "secret");
+            var tokenResponse = tokenClient.RequestResourceOwnerPasswordAsync("wyt", "123456").Result;
+
+            var tokenResult = await tokenClient.RequestRefreshTokenAsync(tokenResponse.RefreshToken);
+
+            Debug.WriteLine(tokenResponse.AccessToken);
+            Debug.WriteLine(tokenResponse.RefreshToken);
+
+            Debug.WriteLine(tokenResult.AccessToken);
+            Debug.WriteLine(tokenResult.RefreshToken);
 
             if (tokenResponse.IsError)
             {
-                Console.WriteLine(tokenResponse.Error);
+                return "";
             }
 
-            // call api
-            var client = new HttpClient();
-            client.SetBearerToken(tokenResponse.AccessToken);
+            //将Token添加到响应头信息
+            HttpContext.Response.Headers.Add("Authorization", "Bearer " + tokenResult.AccessToken);
 
-            var response = await client.GetAsync("http://localhost:5002/api/account");
+            var httpClient = new HttpClient();
+            httpClient.SetBearerToken(tokenResponse.AccessToken);
+
+            var response = httpClient.GetAsync("http://localhost:6001/api/values/RefreshTokensAsync").Result;
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine(response.StatusCode);
-            }
-            else
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(JArray.Parse(content));
+                return "";
             }
 
-            var ret = new JsonResult("");
-            return await Task.FromResult(ret);
+
+            return tokenResult.AccessToken;
         }
     }
 }

@@ -14,8 +14,8 @@ namespace Framework.WebApi.Attributes
     {
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            context.HttpContext.Response.Headers.Remove("dangguitoken");
-            context.HttpContext.Response.Headers.Add("dangguitoken", "wawawaww");
+            var hasAuth = context.HttpContext.Response.Headers["Authorization"];
+
             base.OnActionExecuted(context);
         }
     }
