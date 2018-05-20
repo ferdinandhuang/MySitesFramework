@@ -85,6 +85,7 @@ namespace MySites.Web.Controllers
 
             //将Token添加到响应头信息
             HttpContext.Response.Headers.Add("Authorization", "Bearer " + tokenResult.AccessToken);
+            
 
             var httpClient = new HttpClient();
             httpClient.SetBearerToken(tokenResponse.AccessToken);
