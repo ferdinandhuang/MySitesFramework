@@ -42,8 +42,8 @@ $(function () {
             var data = { Username: username, Password: password };
 
             //Ã·Ωª
-            $.post('/Login/Login', data, function (data) {
-                alert(data, 123);
+            $.post('/Login/Login', data, function (resultdata) {
+                console.log(resultdata, 123);
             }, JSON);
         }
     });

@@ -38,9 +38,9 @@ namespace MySites.Web.Controllers
         /// </summary>
         [HttpPost]
         [AllowAnonymous]
-        public string Login(LoginUser loginUser)
+        public async Task<string> Login(LoginUser loginUser)
         {
-            var a = Test();
+            var a = await Test();
             return a.ToString();
         }
 
