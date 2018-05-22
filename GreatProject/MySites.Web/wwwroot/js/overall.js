@@ -9,7 +9,8 @@ $(function () {
             //通过XMLHttpRequest取得响应头:token
             var dangguitoken = XMLHttpRequest.getResponseHeader("Authorization");
             if (dangguitoken == undefined) {
-                window.location.replace("/login");
+                //window.location.replace("/login");
+                console.log('no auth header');
             }
             else {
                 localStorage.dangguitoken = dangguitoken;
@@ -22,6 +23,7 @@ $(function () {
                 if (jsonData.state == -1) {
                     //如果超时就处理 ，指定要跳转的页面(比如登陆页)
                     alert(jsonData.msg);
+                    console.log('json response Error')
                     window.location.replace("/login");
                 } else if (jsonData.state == 0) {
                     //其他的异常情况,给个提示。
@@ -34,10 +36,12 @@ $(function () {
         },
         statusCode: {
             401: function () {
-                window.location.replace("/login");
+                //window.location.replace("/login");
+                console.log('401');
             },
             403: function () {
-                window.location.replace("/login");
+                console.log('403');
+                //window.location.replace("/login");
             },
             404: function () {
                 alert('数据获取/输入失败，没有此服务。404');
