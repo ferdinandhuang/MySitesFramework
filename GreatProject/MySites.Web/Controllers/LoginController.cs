@@ -40,6 +40,12 @@ namespace MySites.Web.Controllers
         [AllowAnonymous]
         public async Task<string> Login(LoginUser loginUser)
         {
+            var dico = DiscoveryClient.GetAsync("http://localhost:6001").Result;
+
+            //token
+            var tokenClient = new TokenClient(dico.TokenEndpoint, "DangguiSite", "secret");
+            var tokenResponse = tokenClient.RequestResourceOwnerPasswordAsync(loginUser.Username, loginUser.Password).Result;
+
             var a = await Test();
             return a.ToString();
         }
@@ -82,19 +88,25 @@ namespace MySites.Web.Controllers
             {
                 return "";
             }
-
+            
             //将Token添加到响应头信息
             HttpContext.Response.Headers.Add("Authorization", "Bearer " + tokenResult.AccessToken);
-            
 
-            var httpClient = new HttpClient();
-            httpClient.SetBearerToken(tokenResponse.AccessToken);
 
-            var response = httpClient.GetAsync("http://localhost:6001/api/values/RefreshTokensAsync").Result;
-            if (!response.IsSuccessStatusCode)
-            {
-                return "";
-            }
+            //测试
+
+            var introspectionClient = new IntrospectionClient(
+                dico.IntrospectionEndpoint,
+                "api",
+                "secret");
+
+            var vresponse = await introspectionClient.SendAsync
+                (
+                    new IntrospectionRequest { Token = tokenResult.AccessToken }
+                );
+
+            var isActive = vresponse.IsActive;
+
 
 
             return tokenResult.AccessToken;

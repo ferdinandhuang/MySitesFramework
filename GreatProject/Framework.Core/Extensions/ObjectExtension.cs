@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Framework.Core.Common;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -1114,12 +1115,12 @@ namespace Framework.Core.Extensions
         /// <summary>
         /// 标记。
         /// </summary>
-        public Flag Flag { get; set; }
+        public Status Status { get; set; }
 
         /// <summary>
         /// 返回值。
         /// </summary>
-        public T Return { get; set; }
+        public T Data { get; set; }
 
         /// <summary>
         /// 消息。
@@ -1155,26 +1156,5 @@ namespace Framework.Core.Extensions
         /// 对象。
         /// </summary>
         public object Object { get; set; }
-    }
-
-    /// <summary>
-    /// 标记。
-    /// </summary>
-    public enum Flag
-    {
-        /// <summary>
-        /// 默认。
-        /// </summary>
-        Default,
-
-        /// <summary>
-        /// 真。
-        /// </summary>
-        True,
-
-        /// <summary>
-        /// 假。
-        /// </summary>
-        False
     }
 }

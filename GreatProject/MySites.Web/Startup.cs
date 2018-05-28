@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace MySites.Web
 {
@@ -55,12 +56,17 @@ namespace MySites.Web
                 config.Filters.Add(new ApiAuthorizeFilter(policy));
             });
 
-            services.AddAuthentication("Bearer")//添加授权模式
-                .AddIdentityServerAuthentication(Options => {
-                    Options.Authority = "http://localhost:6001";//授权服务器地址
-                    Options.RequireHttpsMetadata = false;//是否是https
-                    Options.ApiName = "api";
-                });
+            services.AddAuthentication(options =>
+                    {
+                        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    }).
+                    AddIdentityServerAuthentication(options =>
+                    {
+                        options.Authority = "http://localhost:6001";//授权服务器地址
+                        options.RequireHttpsMetadata = false;//是否是https
+                        options.ApiName = "api";
+                    });
 
             InitIoC(services);
         }
