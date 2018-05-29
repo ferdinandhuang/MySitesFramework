@@ -22,7 +22,7 @@
 >- 修改Web项目中的Startup的仓储层、业务层的程序集注入名称
 
 >**Doing**
->- 基于Identityserver4的身份认证，采用Bearer模式，采用JWT规范。单独部署[认证服务](https://gogs.danggui.fun/ferdinandhuang/AuthPlatform)
+>- 基于Identityserver4的身份认证，采用Bearer模式，采用JWT规范。单独部署认证服务
 
 >**TODO**
 >- 添加RabbitMQ消息队列
