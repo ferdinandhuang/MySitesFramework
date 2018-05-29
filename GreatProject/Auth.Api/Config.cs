@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Security.Claims;
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
@@ -14,7 +15,9 @@ namespace Auth.Api
         {
             return new List<ApiResource>
             {
-                new ApiResource("api")
+                new ApiResource("testApi"),
+                new ApiResource("testApi2"),
+                new ApiResource("api", "My API"){ UserClaims = new List<string>(){ JwtClaimTypes.Name, JwtClaimTypes.Role }}
             };
         }
 
@@ -36,7 +39,7 @@ namespace Auth.Api
                     AllowAccessTokensViaBrowser = true,
                     RequireConsent = false,
                     AllowedScopes={
-                        "api"
+                        "testApi"
                     },
                 },
                 new Client()
@@ -55,7 +58,30 @@ namespace Auth.Api
                     RequireConsent = false,
                     AllowedScopes =
                     {
-                        "api"
+                        "api",
+                        IdentityServerConstants.StandardScopes.OpenId, //必须要添加，否则报forbidden错误
+                        IdentityServerConstants.StandardScopes.Profile
+                    },
+                    AccessTokenType = AccessTokenType.Jwt,
+                    AllowOfflineAccess = true
+                },
+                new Client()
+                {
+                    ClientId = "DangguiSite2",
+                    AccessTokenLifetime = 180,
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    AbsoluteRefreshTokenLifetime = 1800,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AlwaysSendClientClaims = true,
+                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = false,
+                    AllowedScopes =
+                    {
+                        "testApi2"
                     },
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowOfflineAccess = true

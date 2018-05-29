@@ -46,8 +46,9 @@ namespace MySites.Web.Controllers
             var tokenClient = new TokenClient(dico.TokenEndpoint, "DangguiSite", "secret");
             var tokenResponse = tokenClient.RequestResourceOwnerPasswordAsync(loginUser.Username, loginUser.Password).Result;
 
-            var a = await Test();
-            return a.ToString();
+            //var a = await Test();
+            HttpContext.Response.Headers.Add("Authorization", "Bearer " + tokenResponse.AccessToken);
+            return tokenResponse.AccessToken.ToString();
         }
 
         /// <summary>
@@ -62,8 +63,21 @@ namespace MySites.Web.Controllers
         }
 
         [HttpPost]
-        public string wawa()
+        [Authorize(Roles = "admin")]
+        public async Task<string> wawaAsync()
         {
+            var claim = User;
+
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var client = new DiscoveryClient("http://localhost:6001");
+            client.Policy.RequireHttps = false;
+            var disco = await client.GetAsync();
+            var userInfoClient = new UserInfoClient(disco.UserInfoEndpoint);
+
+            var response = await userInfoClient.GetAsync(token);
+            var claims = response.Claims;
+
+
             string a = "12312123";
             return a;
         }

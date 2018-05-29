@@ -2,12 +2,14 @@
 using Framework.Core.Extensions;
 using Framework.Core.IoC;
 using Framework.Core.Options;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 
@@ -30,6 +32,12 @@ namespace Auth.Api
 
             services.AddIdentityServer()
                 .AddSigningCredential(dangguiPrivateCert)
+                //.AddTestUsers(Config.GetTestUsers())
+                .AddInMemoryIdentityResources(new List<IdentityResource>
+                {
+                    new IdentityResources.OpenId(), //必须要添加，否则报无效的scope错误
+                    new IdentityResources.Profile(),
+                })
                 .AddInMemoryApiResources(Config.GetResources())
                 .AddInMemoryClients(Config.GetClients())
                 .AddValidationKey(dangguiPublicCert)
@@ -56,7 +64,12 @@ namespace Auth.Api
 
             app.UseIdentityServer();
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Login}/{action=Index}/{id?}");
+            });
         }
 
 

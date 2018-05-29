@@ -1,4 +1,5 @@
 ﻿using Auth.IRespositories;
+using IdentityModel;
 using IdentityServer4.Validation;
 using System;
 using System.Collections.Generic;
@@ -21,11 +22,14 @@ namespace Auth.Api
             var passwors = context.Password;
             var userRet = userRepositories.Search(username, passwors);
 
-            if(userRet.Status == Framework.Core.Common.Status.Success)
+            var users = userRepositories.GetByRedisCached();
+
+            if (userRet.Status == Framework.Core.Common.Status.Success)
             {
                 var claim = new List<Claim>();
-                claim.Add(new Claim("Name", userRet.Data.Name));
-                context.Result = new GrantValidationResult(subject: "admin", authenticationMethod: "custom", claims: claim);
+                claim.Add(new Claim(JwtClaimTypes.Name, userRet.Data.Name));
+                claim.Add(new Claim(JwtClaimTypes.Role, "admin"));
+                context.Result = new GrantValidationResult("admin", OidcConstants.AuthenticationMethods.Password, claims: claim);
             }
 
             return Task.CompletedTask;

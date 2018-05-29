@@ -2,6 +2,7 @@
 using AspectCore.Configuration;
 using AspectCore.Extensions.DependencyInjection;
 using AspectCore.Injector;
+using Framework.Core.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Framework.Core.IoC
@@ -12,7 +13,13 @@ namespace Framework.Core.IoC
         public static IServiceProvider BuildServiceProvider(IServiceCollection services, Action<IAspectConfiguration> configure = null)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
-            services.AddDynamicProxy(configure);
+            //services.AddDynamicProxy(configure);
+
+            services.AddDynamicProxy(config => {
+                //使用通配符的特定全局拦截器
+                config.Interceptors.AddTyped<RedisCacheAttribute>(Predicates.ForNameSpace("Auth.*"));
+            });
+
             services.AddAspectCoreContainer();
             return resolver = services.ToServiceContainer().Build();
         }

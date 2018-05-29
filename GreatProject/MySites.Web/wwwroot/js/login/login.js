@@ -50,8 +50,8 @@ $(function () {
 
     //
     $('#forget').click(function () {
-            $.post('/Login/wawa', function (data) {
+        $.post('/Login/wawaAsync', function (data) {
 
-            }, JSON);
+        }, JSON);
     });
 });
