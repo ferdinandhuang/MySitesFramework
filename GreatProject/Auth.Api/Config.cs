@@ -15,9 +15,11 @@ namespace Auth.Api
         {
             return new List<ApiResource>
             {
-                new ApiResource("testApi"),
-                new ApiResource("testApi2"),
-                new ApiResource("MainSite", "Main Site"){ UserClaims = new List<string>(){ JwtClaimTypes.Name, JwtClaimTypes.Role }}
+                new ApiResource("Service", "My Service"){ UserClaims = new List<string>(){ JwtClaimTypes.Name, JwtClaimTypes.Role }},
+                new ApiResource("MainSite", "Main Site")
+                {
+                    UserClaims = new List<string>(){ JwtClaimTypes.Name, JwtClaimTypes.Role },
+                    ApiSecrets = { new Secret("secret".Sha256()) }}
             };
         }
 
@@ -26,22 +28,6 @@ namespace Auth.Api
         {
             return new List<Client>
             {
-                new Client()
-                {
-                    ClientId="client",
-                    AccessTokenLifetime = 180,
-                    RefreshTokenExpiration = TokenExpiration.Absolute,
-                    AbsoluteRefreshTokenLifetime = 1800,
-                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
-                    ClientSecrets={
-                        new Secret("secret".Sha256())
-                    },
-                    AllowAccessTokensViaBrowser = true,
-                    RequireConsent = false,
-                    AllowedScopes={
-                        "testApi"
-                    },
-                },
                 new Client()
                 {
                     ClientId = "DangguiSite",
@@ -60,27 +46,11 @@ namespace Auth.Api
                     {
                         "MainSite",
                         IdentityServerConstants.StandardScopes.OpenId, //必须要添加，否则报forbidden错误
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
                     },
-                    AccessTokenType = AccessTokenType.Jwt,
+                    AccessTokenType = AccessTokenType.Reference,
                     AllowOfflineAccess = true
                 },
-            };
-        }
-
-        //TestUser
-        public static List<TestUser> GetTestUsers()
-        {
-            return new List<TestUser>{
-                new TestUser{
-                    SubjectId="1",
-                    Username="wyt",
-                    Password="123456",
-                    Claims = new List<Claim>()
-                    {
-                        new Claim("wawa", "aoao"),
-                    }
-                }
             };
         }
     }

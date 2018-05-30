@@ -28,6 +28,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using IdentityServer4.AccessTokenValidation;
 
 namespace MySites.Web
 {
@@ -58,17 +59,16 @@ namespace MySites.Web
             });
 
             var authLink = Configuration["RelativeLink:Auth"];
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).
-                    AddIdentityServerAuthentication(options =>
+            var apiName = Configuration["ApiInfo:ApiName"];
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                    .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme,
+                    options =>
                     {
-                        options.Authority = authLink;//授权服务器地址
-                        options.RequireHttpsMetadata = false;//是否是https
-                        options.ApiName = Configuration["ApiInfo:ApiName"];
+                        options.Authority = authLink;
+                        options.RequireHttpsMetadata = false;
+                        options.ApiName = apiName;
+                        options.ApiSecret = Configuration["ApiInfo:Secrect"];
+                        options.SupportedTokens = SupportedTokens.Reference;
                     });
             #endregion
 

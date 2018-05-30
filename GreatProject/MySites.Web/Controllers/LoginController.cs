@@ -106,7 +106,7 @@ namespace MySites.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<string> wawaAsync()
         {
             var claim = User;
