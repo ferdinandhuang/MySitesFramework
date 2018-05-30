@@ -6,14 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Auth.IRespositories
 {
     public interface IUserRepositories : IRepository<User>
     {
         void AddTest();
-
-        [RedisCache(Expiration = 5)]
+        
         Result<User> Search(string username, string passwords);
 
         [RedisCache(CacheKey = "Redis_Cache_User", Expiration = 5)]

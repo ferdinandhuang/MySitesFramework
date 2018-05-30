@@ -9,6 +9,7 @@ using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MySites.DTO;
 using MySites.Web.Models;
 using Newtonsoft.Json.Linq;
@@ -17,9 +18,10 @@ namespace MySites.Web.Controllers
 {
     public class LoginController : ApiBasicController
     {
-        public LoginController()
+        private readonly IConfiguration configuration;
+        public LoginController(IConfiguration _configuration)
         {
-
+            configuration = _configuration;
         }
 
         [AllowAnonymous]
@@ -40,7 +42,8 @@ namespace MySites.Web.Controllers
         [AllowAnonymous]
         public async Task<string> Login(LoginUser loginUser)
         {
-            var dico = DiscoveryClient.GetAsync("http://localhost:6001").Result;
+            var authLink = configuration["RelativeLink:Auth"];
+            var dico = DiscoveryClient.GetAsync(authLink).Result;
 
             //token
             var tokenClient = new TokenClient(dico.TokenEndpoint, "DangguiSite", "secret");

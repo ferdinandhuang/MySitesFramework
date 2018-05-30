@@ -425,6 +425,8 @@ namespace Framework.Core.Extensions
 
         public static object ToObject(this byte[] source)
         {
+            if (source == null)
+                return null;
             using (var memStream = new MemoryStream())
             {
                 var bf = new BinaryFormatter();

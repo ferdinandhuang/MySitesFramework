@@ -46,8 +46,9 @@ namespace MySites.Web
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            #region Identity
             services.AddMvc(config =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -56,19 +57,22 @@ namespace MySites.Web
                 config.Filters.Add(new ApiAuthorizeFilter(policy));
             });
 
+            var authLink = Configuration["RelativeLink:Auth"];
+
             services.AddAuthentication(options =>
-                    {
-                        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    }).
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).
                     AddIdentityServerAuthentication(options =>
                     {
-                        options.Authority = "http://localhost:6001";//授权服务器地址
+                        options.Authority = authLink;//授权服务器地址
                         options.RequireHttpsMetadata = false;//是否是https
                         options.ApiName = "api";
                     });
+            #endregion
 
-            InitIoC(services);
+            return InitIoC(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

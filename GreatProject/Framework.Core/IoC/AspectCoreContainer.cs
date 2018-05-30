@@ -13,12 +13,7 @@ namespace Framework.Core.IoC
         public static IServiceProvider BuildServiceProvider(IServiceCollection services, Action<IAspectConfiguration> configure = null)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
-            //services.AddDynamicProxy(configure);
-
-            services.AddDynamicProxy(config => {
-                //使用通配符的特定全局拦截器
-                config.Interceptors.AddTyped<RedisCacheAttribute>(Predicates.ForNameSpace("Auth.*"));
-            });
+            services.AddDynamicProxy(configure);
 
             services.AddAspectCoreContainer();
             return resolver = services.ToServiceContainer().Build();

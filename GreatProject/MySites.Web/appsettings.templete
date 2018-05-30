@@ -9,5 +9,8 @@
     "DataBaseType": "MsSqlServer", //MsSqlServer,MySql
     "DataBase": "initial catalog=dbname;data source=.;password=pwd;User id=uid;MultipleActiveResultSets=True",
     "Redis": "127.0.0.1:6379,abortConnect=false,connectRetry=3,connectTimeout=3000,defaultDatabase=1,syncTimeout=3000,version=3.2.100,responseTimeout=3000"
+  },
+  "RelativeLink": {
+    "Auth": "http//:127.0.0.1:6001"
   }
 }

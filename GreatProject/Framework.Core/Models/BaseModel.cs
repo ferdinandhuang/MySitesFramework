@@ -13,6 +13,7 @@ namespace Framework.Core.Models
     /// <summary>
     /// 所有数据表实体类都必须实现此接口
     /// </summary>
+    [Serializable]
     public class BaseModel : IAggregateRoot
     {
         public BaseModel()

@@ -21,18 +21,18 @@ namespace Framework.Core.Cache
 
         public static async Task<T> GetAsync<T>(string key) => (T)await GetAsync(key);
 
-        public static void Set(string key, object data, int expiredSeconds) => Instance.Set(key, data.ToBytes(),
+        public static void Set(string key, object data, int expiredTime) => Instance.Set(key, data.ToBytes(),
             new DistributedCacheEntryOptions()
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expiredSeconds)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(expiredTime)
             });
 
-        public static async Task SetAsync(string key, object data, int expiredSeconds) => await Instance.SetAsync(
+        public static async Task SetAsync(string key, object data, int expiredTime) => await Instance.SetAsync(
             key,
             data.ToBytes(),
             new DistributedCacheEntryOptions()
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expiredSeconds)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(expiredTime)
             });
 
         public static void Remove(string key) => Instance.Remove(key);

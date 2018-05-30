@@ -25,33 +25,32 @@ namespace Auth.Api
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            #region Identityserver4
             var dangguiPrivateCert = new X509Certificate2(Path.Combine(".", "dangguiPrivate.pfx"), "Assassin016");
             var dangguiPublicCert = new X509Certificate2(Path.Combine(".", "dangguiPublic.cer"), "Assassin016");
 
             services.AddIdentityServer()
-                .AddSigningCredential(dangguiPrivateCert)
-                //.AddTestUsers(Config.GetTestUsers())
+                .AddSigningCredential(dangguiPrivateCert)//Private Key
+                .AddValidationKey(dangguiPublicCert)//Public Key
                 .AddInMemoryIdentityResources(new List<IdentityResource>
                 {
                     new IdentityResources.OpenId(), //必须要添加，否则报无效的scope错误
                     new IdentityResources.Profile(),
-                })
-                .AddInMemoryApiResources(Config.GetResources())
-                .AddInMemoryClients(Config.GetClients())
-                .AddValidationKey(dangguiPublicCert)
+                })//通过Access_token获取claims用
+                .AddInMemoryApiResources(Config.GetResources()) //临时：HardCode Api Resources
+                .AddInMemoryClients(Config.GetClients())    //临时：HardCode Clients
                 .AddJwtBearerClientAuthentication()
-                .AddValidationKey(dangguiPublicCert)
                 .AddValidators()
                 .AddInMemoryCaching()
-                .AddJwtBearerClientAuthentication()
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()    //账号密码认证
                 ;
+            #endregion
 
-
-            InitIoC(services);
             services.AddMvc();
+
+            return InitIoC(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

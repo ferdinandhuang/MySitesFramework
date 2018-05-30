@@ -1,5 +1,6 @@
 ﻿using Framework.Core.Models;
 using MySites.Common.Enum;
+using StackExchange.Redis.Extensions.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,6 +9,8 @@ using System.Text;
 namespace MySites.DataModels
 {
     [Table("User")]
+
+    [Serializable]
     public class User : BaseModel
     {
         /// <summary>

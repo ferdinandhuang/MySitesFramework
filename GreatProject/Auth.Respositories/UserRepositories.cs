@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Auth.IRespositories;
 using EntityFrameworkCore.Triggers;
 using Framework.Core.Attributes;
@@ -10,6 +11,7 @@ using Framework.Core.Common;
 using Framework.Core.DbContextCore.CodeFirst;
 using Framework.Core.Extensions;
 using Framework.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 using MySites.DataModels;
 
 namespace Auth.Respositories
@@ -47,14 +49,13 @@ namespace Auth.Respositories
         
         public IList<User> GetByRedisCached(Expression<Func<User, bool>> where = null)
         {
-            var users = Get();
-
+            var users = DbContext.Get(where, true).ToList();
             //aaAsync();
 
             return users.ToList();
         }
 
-        private async System.Threading.Tasks.Task aaAsync()
+        private async Task aaAsync()
         {
             DistributedCacheManager.Set("123", "55555", 5);
 
