@@ -5,9 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="TinyMapper" Version="3.0.1-beta" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Auth.IRespositories\Auth.IRespositories.csproj" />
     <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
     <ProjectReference Include="..\MySites.DataModels\MySites.DataModels.csproj" />
+    <ProjectReference Include="..\MySites.DTO\MySites.DTO.csproj" />
   </ItemGroup>
 
 </Project>

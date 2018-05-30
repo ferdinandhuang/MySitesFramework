@@ -13,6 +13,8 @@ using Framework.Core.Extensions;
 using Framework.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 using MySites.DataModels;
+using MySites.DTO;
+using Nelibur.ObjectMapper;
 
 namespace Auth.Respositories
 {
@@ -21,64 +23,22 @@ namespace Auth.Respositories
         public UserRepositories(IDbContextCore dbContext) : base(dbContext)
         {
             //插入成功后触发
-            //Triggers<User>.Inserted += async entry =>
-            //{
-
-            //    await entry.Context.SaveChangesWithTriggersAsync(entry.Context.SaveChangesAsync);
-            //    await DistributedCacheManager.RemoveAsync("Redis_Cache_User");//插入成功后清除缓存以更新
-            //};
-            ////修改时触发
-            //Triggers<User>.Updating += entry =>
-            //{
-
-            //};
-        }
-
-        public void AddTest()
-        {
-            var user = new User()
+            Triggers<User>.Inserted += async entry =>
             {
-                UserName = "",
-                Name = "",
-                Passwords = "",
+                await DistributedCacheManager.RemoveAsync("Redis_Cache_User");//插入成功后清除缓存以更新
             };
-
-            var a = GetSingle("");
-            var b = Add(user);
-        }
-        
-        public IList<User> GetByRedisCached(Expression<Func<User, bool>> where = null)
-        {
-            var users = DbContext.Get(where, true).ToList();
-            //aaAsync();
-
-            return users.ToList();
-        }
-
-        private async Task aaAsync()
-        {
-            DistributedCacheManager.Set("123", "55555", 5);
-
-            await DistributedCacheManager.RemoveAsync("Redis_Cache_User");//插入成功后清除缓存以更新
-        }
-        
-        public Result<User> Search(string username, string passwords)
-        {
-            var result = new Result<User>();
-            result.Data = new User();
-
-            var user = GetSingleOrDefault(s => s.UserName == username && s.Passwords == passwords);
-
-            if(user == null)
+            //修改时触发
+            Triggers<User>.Updating += async entry =>
             {
-                result.Message = "用户名或密码错误！";
-                result.Status = Status.Failed;
-                return result;
-            }
+                await DistributedCacheManager.RemoveAsync("Redis_Cache_User");//插入成功后清除缓存以更新
+            };
+        }
+        
+        public IList<User> GetByRedisCached()
+        {
+            var users = Get().ToList();
 
-            result.Status = Status.Success;
-            result.Data = user;
-            return result;
+            return users;
         }
     }
 }

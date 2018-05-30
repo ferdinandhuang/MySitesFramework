@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="TinyMapper" Version="3.0.1-beta" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
     <ProjectReference Include="..\MySites.Common\MySites.Common.csproj" />
     <ProjectReference Include="..\MySites.DataModels\MySites.DataModels.csproj" />

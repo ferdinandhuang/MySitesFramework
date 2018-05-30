@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using Framework.Core.Common;
+using Framework.Core.Extensions;
 using Framework.WebApi;
 using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySites.DTO;
-using MySites.Web.Models;
-using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace MySites.Web.Controllers
 {
     public class LoginController : ApiBasicController
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration Configuration;
+        private readonly string AuthLink;
+        private readonly DiscoveryResponse DiscoveryResponse;
         public LoginController(IConfiguration _configuration)
         {
-            configuration = _configuration;
+            Configuration = _configuration;
+            AuthLink = Configuration["RelativeLink:Auth"];
+            DiscoveryResponse = DiscoveryClient.GetAsync(AuthLink).Result;
         }
 
         [AllowAnonymous]
@@ -40,18 +38,27 @@ namespace MySites.Web.Controllers
         /// </summary>
         [HttpPost]
         [AllowAnonymous]
-        public async Task<string> Login(LoginUser loginUser)
+        public JsonResult Login(LoginUser loginUser)
         {
-            var authLink = configuration["RelativeLink:Auth"];
-            var dico = DiscoveryClient.GetAsync(authLink).Result;
+            try
+            {
+                var tokenClient = new TokenClient(DiscoveryResponse.TokenEndpoint, Configuration["ApiInfo:ClientId"], Configuration["ApiInfo:Secrect"]);
+                var tokenResponse = tokenClient.RequestResourceOwnerPasswordAsync(loginUser.Username, loginUser.Password).Result;
+                
+                if (tokenResponse.IsError)
+                {
+                    return Json(new Result<string>() { Status = Status.Failed, Message = tokenResponse.Error });
+                }
 
-            //token
-            var tokenClient = new TokenClient(dico.TokenEndpoint, "DangguiSite", "secret");
-            var tokenResponse = tokenClient.RequestResourceOwnerPasswordAsync(loginUser.Username, loginUser.Password).Result;
+                HttpContext.Response.Headers.Add("Authorization", "Bearer " + tokenResponse.AccessToken);
+                HttpContext.Response.Headers.Add("Refresh_Token", tokenResponse.RefreshToken);
 
-            //var a = await Test();
-            HttpContext.Response.Headers.Add("Authorization", "Bearer " + tokenResponse.AccessToken);
-            return tokenResponse.AccessToken.ToString();
+                return Json(new Result<string>() { Status = Status.Success });
+            }
+            catch
+            {
+                return Json(new Result<string>() { Status = Status.Error, Message = "Something Happend!" });
+            }
         }
 
         /// <summary>
@@ -65,8 +72,41 @@ namespace MySites.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 刷新Token
+        /// </summary>
+        /// <param name="refresh_token"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        public async Task<JsonResult> RefreshTokenAsync(string refresh_token)
+        {
+            try
+            {
+                var tokenClient = new TokenClient(DiscoveryResponse.TokenEndpoint, Configuration["ApiInfo:ClientId"], Configuration["ApiInfo:Secrect"]);
+                var tokenResponse = await tokenClient.RequestRefreshTokenAsync(refresh_token);
+
+                if (tokenResponse.IsError)
+                {
+                    return Json(new Result<string>() { Status = Status.Failed, Message = tokenResponse.Error });
+                }
+
+                HttpContext.Response.Headers.Add("Authorization", "Bearer " + tokenResponse.AccessToken);
+                HttpContext.Response.Headers.Add("Refresh_Token", tokenResponse.RefreshToken);
+
+                return Json(new Result<string>() { Status = Status.Success });
+            }
+            catch
+            {
+                return Json(new Result<string>() { Status = Status.Error, Message = "Something Happend!" });
+            }
+        }
+
+        /// <summary>
+        /// 权限测试
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<string> wawaAsync()
         {
             var claim = User;
@@ -75,58 +115,12 @@ namespace MySites.Web.Controllers
             var client = new DiscoveryClient("http://localhost:6001");
             client.Policy.RequireHttps = false;
             var disco = await client.GetAsync();
-            var userInfoClient = new UserInfoClient(disco.UserInfoEndpoint);
+            var userInfoClient = new UserInfoClient(DiscoveryResponse.UserInfoEndpoint);
 
             var response = await userInfoClient.GetAsync(token);
             var claims = response.Claims;
 
-
-            string a = "12312123";
-            return a;
-        }
-
-        private async Task<string> Test()
-        {
-            var dico = DiscoveryClient.GetAsync("http://localhost:6001").Result;
-
-            //token
-            var tokenClient = new TokenClient(dico.TokenEndpoint, "DangguiSite", "secret");
-            var tokenResponse = tokenClient.RequestResourceOwnerPasswordAsync("wyt", "123456").Result;
-
-            var tokenResult = await tokenClient.RequestRefreshTokenAsync(tokenResponse.RefreshToken);
-
-            Debug.WriteLine(tokenResponse.AccessToken);
-            Debug.WriteLine(tokenResponse.RefreshToken);
-
-            Debug.WriteLine(tokenResult.AccessToken);
-            Debug.WriteLine(tokenResult.RefreshToken);
-
-            if (tokenResponse.IsError)
-            {
-                return "";
-            }
-            
-            //将Token添加到响应头信息
-            HttpContext.Response.Headers.Add("Authorization", "Bearer " + tokenResult.AccessToken);
-
-
-            //测试
-
-            var introspectionClient = new IntrospectionClient(
-                dico.IntrospectionEndpoint,
-                "api",
-                "secret");
-
-            var vresponse = await introspectionClient.SendAsync
-                (
-                    new IntrospectionRequest { Token = tokenResult.AccessToken }
-                );
-
-            var isActive = vresponse.IsActive;
-
-
-
-            return tokenResult.AccessToken;
+            return "Success";
         }
     }
 }

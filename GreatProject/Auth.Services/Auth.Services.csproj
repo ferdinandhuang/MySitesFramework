@@ -4,4 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Auth.IRespositories\Auth.IRespositories.csproj" />
+    <ProjectReference Include="..\Auth.IServices\Auth.IServices.csproj" />
+    <ProjectReference Include="..\Auth.Respositories\Auth.Respositories.csproj" />
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+    <ProjectReference Include="..\MySites.Common\MySites.Common.csproj" />
+    <ProjectReference Include="..\MySites.DataModels\MySites.DataModels.csproj" />
+    <ProjectReference Include="..\MySites.DTO\MySites.DTO.csproj" />
+  </ItemGroup>
+
 </Project>

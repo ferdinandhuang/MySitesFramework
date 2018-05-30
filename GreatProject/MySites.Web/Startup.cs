@@ -68,7 +68,7 @@ namespace MySites.Web
                     {
                         options.Authority = authLink;//授权服务器地址
                         options.RequireHttpsMetadata = false;//是否是https
-                        options.ApiName = "api";
+                        options.ApiName = Configuration["ApiInfo:ApiName"];
                     });
             #endregion
 

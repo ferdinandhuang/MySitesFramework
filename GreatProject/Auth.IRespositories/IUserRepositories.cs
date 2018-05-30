@@ -12,11 +12,7 @@ namespace Auth.IRespositories
 {
     public interface IUserRepositories : IRepository<User>
     {
-        void AddTest();
-        
-        Result<User> Search(string username, string passwords);
-
-        [RedisCache(CacheKey = "Redis_Cache_User", Expiration = 5)]
-        IList<User> GetByRedisCached(Expression<Func<User, bool>> where = null);
+        [RedisCache(CacheKey = "Redis_Cache_User")]
+        IList<User> GetByRedisCached();
     }
 }

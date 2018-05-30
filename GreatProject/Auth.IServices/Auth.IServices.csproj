@@ -4,4 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+    <ProjectReference Include="..\MySites.DTO\MySites.DTO.csproj" />
+  </ItemGroup>
+
 </Project>

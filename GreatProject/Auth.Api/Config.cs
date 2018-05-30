@@ -17,7 +17,7 @@ namespace Auth.Api
             {
                 new ApiResource("testApi"),
                 new ApiResource("testApi2"),
-                new ApiResource("api", "My API"){ UserClaims = new List<string>(){ JwtClaimTypes.Name, JwtClaimTypes.Role }}
+                new ApiResource("MainSite", "Main Site"){ UserClaims = new List<string>(){ JwtClaimTypes.Name, JwtClaimTypes.Role }}
             };
         }
 
@@ -58,30 +58,9 @@ namespace Auth.Api
                     RequireConsent = false,
                     AllowedScopes =
                     {
-                        "api",
+                        "MainSite",
                         IdentityServerConstants.StandardScopes.OpenId, //必须要添加，否则报forbidden错误
                         IdentityServerConstants.StandardScopes.Profile
-                    },
-                    AccessTokenType = AccessTokenType.Jwt,
-                    AllowOfflineAccess = true
-                },
-                new Client()
-                {
-                    ClientId = "DangguiSite2",
-                    AccessTokenLifetime = 180,
-                    RefreshTokenExpiration = TokenExpiration.Absolute,
-                    AbsoluteRefreshTokenLifetime = 1800,
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
-                    AlwaysSendClientClaims = true,
-                    AllowAccessTokensViaBrowser = true,
-                    RequireConsent = false,
-                    AllowedScopes =
-                    {
-                        "testApi2"
                     },
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowOfflineAccess = true
