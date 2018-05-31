@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using MySites.DataModels;
 using Auth.IServices;
+using IdentityServer4.Stores;
+using IdentityServer4.Models;
 
 namespace Auth.Api
 {
@@ -26,13 +28,28 @@ namespace Auth.Api
 
             if (userRet.Status == Framework.Core.Common.Status.Success)
             {
-                var claim = new List<Claim>();
-                claim.Add(new Claim(JwtClaimTypes.Name, userRet.Data.Name));
-                claim.Add(new Claim(JwtClaimTypes.Role, userRet.Data.Role.ToString()));
-                context.Result = new GrantValidationResult("admin", OidcConstants.AuthenticationMethods.Password, claims: claim);
+                var claims = new List<Claim>();
+                claims.Add(new Claim(JwtClaimTypes.Id, userRet.Data.Id));
+                claims.Add(new Claim(JwtClaimTypes.Name, userRet.Data.Name));
+                claims.Add(new Claim(JwtClaimTypes.Role, userRet.Data.Role.ToString()));
+                
+                //var claims = new List<Claim>() { new Claim("role", "admin") }; //根据 user 对象，设置不同的 role
+                context.Result = new GrantValidationResult(userRet.Data.Id, OidcConstants.AuthenticationMethods.Password, claims);
             }
 
             return Task.CompletedTask;
         }
     }
+
+    //动态查询Client
+    //public class CustomClientStore : IClientStore
+    //{
+    //    public Task<Client> FindClientByIdAsync(string clientId)
+    //    {
+
+    //        var result = _context.Clients.Where(x => x.ClientId == clientId).FirstOrDefault();
+
+    //        return Task.FromResult(result.ToModel());
+    //    }
+    //}
 }

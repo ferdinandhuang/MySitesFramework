@@ -15,11 +15,24 @@ namespace Auth.Api
         {
             return new List<ApiResource>
             {
-                new ApiResource("Service", "My Service"){ UserClaims = new List<string>(){ JwtClaimTypes.Name, JwtClaimTypes.Role }},
+                //new ApiResource("Service", "My Service"){
+                //    UserClaims = new List<string>(){
+                //        JwtClaimTypes.Id,
+                //        JwtClaimTypes.Name,
+                //        JwtClaimTypes.Role,
+                //    },
+                //},
                 new ApiResource("MainSite", "Main Site")
                 {
-                    UserClaims = new List<string>(){ JwtClaimTypes.Name, JwtClaimTypes.Role },
-                    ApiSecrets = { new Secret("secret".Sha256()) }}
+                    UserClaims = new List<string>(){
+                        JwtClaimTypes.Id,
+                        JwtClaimTypes.Name,
+                        JwtClaimTypes.Role,
+                    },
+                    ApiSecrets = {
+                        new Secret("secret".Sha256()),
+                    }
+                },
             };
         }
 
@@ -31,10 +44,13 @@ namespace Auth.Api
                 new Client()
                 {
                     ClientId = "DangguiSite",
-                    AccessTokenLifetime = 180,
+                    AccessTokenLifetime = 600,
                     RefreshTokenExpiration = TokenExpiration.Absolute,
-                    AbsoluteRefreshTokenLifetime = 1800,
+                    AbsoluteRefreshTokenLifetime = 600,
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    RedirectUris ={
+                        "http://localhost:5001/",
+                    },
                     ClientSecrets =
                     {
                         new Secret("secret".Sha256())

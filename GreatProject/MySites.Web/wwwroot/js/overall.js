@@ -8,11 +8,7 @@ $(function () {
         complete: function (XMLHttpRequest, textStatus) {
             //通过XMLHttpRequest取得响应头:token
             var dangguitoken = XMLHttpRequest.getResponseHeader("Authorization");
-            if (dangguitoken == undefined) {
-                //window.location.replace("/login");
-                console.log('no auth header');
-            }
-            else {
+            if (dangguitoken != undefined) {
                 localStorage.dangguitoken = dangguitoken;
             }
 
@@ -36,12 +32,16 @@ $(function () {
         },
         statusCode: {
             401: function () {
-                //window.location.replace("/login");
+                //跳转登录
+                var redirectURL = encodeURIComponent(location.href);
+                window.location.replace("http://localhost:6001/login?redirect=" + redirectURL);
                 console.log('401');
             },
             403: function () {
+                //跳转登录
+                var redirectURL = encodeURIComponent(location.href);
+                window.location.replace("http://localhost:6001/login?redirect=" + redirectURL);
                 console.log('403');
-                //window.location.replace("/login");
             },
             404: function () {
                 alert('数据获取/输入失败，没有此服务。404');

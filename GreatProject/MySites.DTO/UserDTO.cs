@@ -10,6 +10,10 @@ namespace MySites.DTO
     public class UserDTO
     {
         /// <summary>
+        /// ID
+        /// </summary>
+        public string Id { get; set; }
+        /// <summary>
         /// 用户名
         /// </summary>
         public string UserName { get; set; }

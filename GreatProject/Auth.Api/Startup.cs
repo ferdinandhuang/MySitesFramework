@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace Auth.Api
 {
@@ -27,6 +28,8 @@ namespace Auth.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+
             #region Identityserver4
             var dangguiPrivateCert = new X509Certificate2(Path.Combine(".", "dangguiPrivate.pfx"), "Assassin016");
             var dangguiPublicCert = new X509Certificate2(Path.Combine(".", "dangguiPublic.cer"), "Assassin016");
@@ -41,14 +44,12 @@ namespace Auth.Api
                 })//通过Access_token获取claims用
                 .AddInMemoryApiResources(Config.GetResources()) //临时：HardCode Api Resources
                 .AddInMemoryClients(Config.GetClients())    //临时：HardCode Clients
-                .AddJwtBearerClientAuthentication()
-                .AddValidators()
-                .AddInMemoryCaching()
+                //.AddJwtBearerClientAuthentication()
+                //.AddValidators()
+                //.AddInMemoryCaching()
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()    //账号密码认证
                 ;
             #endregion
-
-            services.AddMvc();
 
             return InitIoC(services);
         }
@@ -56,10 +57,18 @@ namespace Auth.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            //app.UseHttpProfiler();      //启动Http请求监控
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+            app.UseStaticFiles();
 
             app.UseIdentityServer();
 

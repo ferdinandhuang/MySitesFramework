@@ -17,9 +17,18 @@ namespace Auth.Api
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("hosting.json", optional: true)
                 .Build();
+
+            return WebHost.CreateDefaultBuilder(args)
+                    //.UseUrls("http://*:6001")
+                    .UseConfiguration(config)
+                    .UseStartup<Startup>()
+                    .Build();
+        }
     }
 }

@@ -66,7 +66,6 @@ namespace MySites.Web.Controllers
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <returns></returns>
-        [AllowAnonymous]
         public IActionResult Foreget(string userName)
         {
             return View();

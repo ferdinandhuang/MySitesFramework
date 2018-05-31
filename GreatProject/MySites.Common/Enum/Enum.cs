@@ -11,5 +11,7 @@ namespace MySites.Common.Enum
         Normal = 0,
         //管理员
         Admin = 1,
+        //小伙伴
+        Partner = 2,
     }
 }
