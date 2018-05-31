@@ -65,7 +65,7 @@ namespace MySites.Web.Controllers
                     return Json(new Result<string>() { Status = Status.Failed, Message = tokenResponse.Error });
                 }
 
-                var userId = await GetUserID(tokenResponse.AccessToken);
+                var userId = await GetUserID(tokenResponse.AccessToken, true);
                 if (userId == null)
                     throw new Exception("No UserID");
                 //设置缓存
@@ -139,7 +139,7 @@ namespace MySites.Web.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<string> GetUserID(string token)
+        public async Task<string> GetUserID(string token, bool isLogin = false)
         {
 
             var userInfoClient = new UserInfoClient(DiscoveryResponse.UserInfoEndpoint);
@@ -150,11 +150,14 @@ namespace MySites.Web.Controllers
             {
                 if (claim.Type == "sub")
                 {
-                    //在缓存中查找Token
-                    var cacheToken = DistributedCacheManager.Get(claim.Value);
-                    if (cacheToken == null)
+                    if (!isLogin)
                     {
-                        return null;
+                        //在缓存中查找Token
+                        var cacheToken = DistributedCacheManager.Get(claim.Value);
+                        if (cacheToken == null)
+                        {
+                            return null;
+                        }
                     }
                     
                     return claim.Value;

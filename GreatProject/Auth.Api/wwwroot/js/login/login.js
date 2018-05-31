@@ -7,7 +7,7 @@ $(function () {
     }
 });
 
-//获取浏览器参数a和b
+//获取浏览器参数
 function getQueryString(name) {
 
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
@@ -57,12 +57,16 @@ $(function () {
             var data = { Username: username, Password: password };
 
             //提交
-            $.post('/Login/Login', data, function (resultdata) {
+            $.post('/Login/Login', data, function (resultdata, textStatus, XMLHttpRequest) {
                 //Redirect Back
                 var redirectURL = localStorage.redirectURL;
+
+                $.StandardPost(redirectURL, { access: ' + localStorage.dangguitoken + ', refresh: ' + localStorage.dangguire_token + ' });
+                
+                return;
                 if (redirectURL && redirectURL != undefined && redirectURL != '' && redirectURL != 'null') {
                     localStorage.redirectURL = '';
-                    window.location.replace(localStorage.redirectURL);
+                    window.location.replace(redirectURL + '?access=' + localStorage.dangguitoken + '&refresh=' + localStorage.dangguire_token);
                 };
             }, 'json');
         }
@@ -74,4 +78,19 @@ $(function () {
 
         }, 'json');
     });
+});
+
+$.extend({
+    StandardPost: function (url, args) {
+        var form = $("<form method='post'></form>"),
+            input;
+        form.attr({ "action": url });
+        $.each(args, function (key, value) {
+            input = $("<input type='hidden'>");
+            input.attr({ "name": key });
+            input.val(value);
+            form.append(input);
+        });
+        form.submit();
+    }
 });
