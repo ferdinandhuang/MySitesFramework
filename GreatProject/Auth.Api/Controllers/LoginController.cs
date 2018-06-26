@@ -2,22 +2,33 @@
 using Framework.Core.Common;
 using Framework.Core.Extensions;
 using IdentityModel.Client;
+using IdentityServer4.Extensions;
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MySites.DataModels;
 using MySites.DTO;
 using System;
 using System.Threading.Tasks;
 
 namespace MySites.Web.Controllers
 {
+    [Authorize]
     public class LoginController : Controller
     {
         private readonly IConfiguration Configuration;
         private readonly string AuthLink;
         private readonly DiscoveryResponse DiscoveryResponse;
-        public LoginController(IConfiguration _configuration)
+        private readonly IPersistedGrantService _persistedGrantService;
+        public LoginController(
+            IPersistedGrantService persistedGrantService,
+            IConfiguration _configuration
+            )
         {
+            _persistedGrantService = persistedGrantService;
             Configuration = _configuration;
             AuthLink = Configuration["RelativeLink:Auth"];
             DiscoveryResponse = DiscoveryClient.GetAsync("http://localhost:6001").Result;
@@ -33,17 +44,31 @@ namespace MySites.Web.Controllers
             }
             return View();
         }
-        
+
+        [AllowAnonymous]
+        public async Task<JsonResult> IntroTestAsync()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var client = "MainSite";
+            var introspectionClient = new IntrospectionClient(DiscoveryResponse.IntrospectionEndpoint, client, Configuration["ApiInfo:Secrect"]);
+            var response = await introspectionClient.SendAsync(new IntrospectionRequest { Token = token });
+
+            return Json("");
+        }
+
         /// <summary>
         /// 注销
         /// </summary>
         /// <returns></returns>
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
-            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            var userID = await GetUserID(token);
-            SetCache(userID);
+            var subjectId = HttpContext.User.Identity.GetSubjectId();
+            await _persistedGrantService.RemoveAllGrantsAsync(subjectId, "DangguiSite");
+
+            //var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            //var userID = await GetUserID(token);
+            //SetCache(userID);
             return View("Index");
         }
 
@@ -175,22 +200,27 @@ namespace MySites.Web.Controllers
         /// <returns></returns>
         private void SetCache(string key, object something = null)
         {
-            if(something == null)
+            if(key != null)
             {
-                //删除缓存
-                DistributedCacheManager.Remove(key);
-            }
+                if (something == null)
+                {
+                    //删除缓存
+                    DistributedCacheManager.Remove(key);
+                }
+                else
+                {
+                    //根据key获取缓存
+                    var content = DistributedCacheManager.Get(key);
+                    if (content != null)
+                    {
+                        //删除缓存
+                        DistributedCacheManager.Remove(key);
+                    }
 
-            //根据key获取缓存
-            var content = DistributedCacheManager.Get(key);
-            if (content != null)
-            {
-                //删除缓存
-                DistributedCacheManager.Remove(key);
+                    //设置缓存
+                    DistributedCacheManager.Set(key, something, 10);
+                }
             }
-
-            //设置缓存
-            DistributedCacheManager.Set(key, something, 10);
             return;
         }
 

@@ -2,7 +2,9 @@
 using Framework.Core.Extensions;
 using Framework.Core.IoC;
 using Framework.Core.Options;
+using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Distributed;
@@ -28,7 +30,12 @@ namespace Auth.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                 .RequireAuthenticatedUser()
+                                 .Build();
+            });
 
             #region Identityserver4
             var dangguiPrivateCert = new X509Certificate2(Path.Combine(".", "dangguiPrivate.pfx"), "Assassin016");
@@ -51,6 +58,19 @@ namespace Auth.Api
                 ;
             #endregion
 
+            var authLink = Configuration["RelativeLink:Auth"];
+            var apiName = Configuration["ApiInfo:ApiName"];
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                    .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme,
+                    options =>
+                    {
+                        options.Authority = authLink;
+                        options.RequireHttpsMetadata = false;
+                        options.ApiName = apiName;
+                        options.ApiSecret = Configuration["ApiInfo:Secrect"];
+                        options.SupportedTokens = SupportedTokens.Reference;
+                    });
+
             return InitIoC(services);
         }
 
@@ -71,6 +91,7 @@ namespace Auth.Api
             app.UseStaticFiles();
 
             app.UseIdentityServer();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
