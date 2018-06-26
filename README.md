@@ -22,9 +22,13 @@
 >- 修改Web项目中的Startup的仓储层、业务层的程序集注入名称
 
 >**Doing**
->- 基于Identityserver4的身份认证，采用Bearer模式，采用JWT规范。单独部署认证服务
+>- 基于Identityserver4的身份认证
 
 >**TODO**
+>- 添加Ocelot网关
+>- 添加consul微服务架构
 >- 添加RabbitMQ消息队列
+>- 前后端分离
+>- MySqlBug修复
 >- 添加DBFirst支持(Dapper/Chole)
 >- 待定
