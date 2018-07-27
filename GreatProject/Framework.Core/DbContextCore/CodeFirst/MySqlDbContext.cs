@@ -20,7 +20,7 @@ namespace Framework.Core.DbContextCore.CodeFirst
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(_option.ConnectionString);
+            optionsBuilder.UseMySQL(_option.ConnectionString);
             base.OnConfiguring(optionsBuilder);
         }
 

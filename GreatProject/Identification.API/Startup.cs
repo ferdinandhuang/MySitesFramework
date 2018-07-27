@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
+using Framework.Core.DbContextCore.DbFirst;
 
 namespace Identification.API
 {
@@ -112,28 +113,53 @@ namespace Identification.API
 
             #endregion
 
-            #region 配置DbContextOption
-
-            //database connectionstring
+            #region connectionstring
             var dbConnectionString = Configuration.GetConnectionString("DataBase");//连接字符串
-            //配置DbContextOption
-            services.Configure<DbContextOption>(options =>
-            {
-                options.ConnectionString = dbConnectionString;
-                options.ModelAssemblyName = "MySites.DataModels";
-            });
-
             #endregion
 
-            #region 注入Database
+            #region EFCodeFirst注入Database
+            //配置DbContextOption
+            //services.Configure<DbContextOption>(options =>
+            //{
+            //    options.ConnectionString = dbConnectionString;
+            //    options.ModelAssemblyName = "MySites.DataModels";
+            //});
+            //var dataBaseType = Configuration.GetConnectionString("DataBaseType");//数据库类型
+            //if (dataBaseType == "MsSqlServer")
+            //{
+            //    services.AddSingleton<IDbContextCore, SqlServerDbContext>();//注入EF上下文
+            //}
+            //else if (dataBaseType == "MySql")
+            //{
+            //    services.AddSingleton<IDbContextCore, MySqlDbContext>();//注入EF上下文
+            //}
+            //else
+            //{
+            //    throw new Exception("未能找到相应的数据库连接！");
+            //}
+
+
+            services.AddScoped<Chloe.IDbContext>((serviceProvider) =>
+            {
+                return new Chloe.MySql.MySqlContext(new MySqlConnectionFactory(dbConnectionString));
+            });
+            #endregion
+
+            #region ChloeORM注入Database
             var dataBaseType = Configuration.GetConnectionString("DataBaseType");//数据库类型
-            if (dataBaseType == "MsSqlServer")
+            if (dataBaseType == "MySQL")
             {
-                services.AddSingleton<IDbContextCore, SqlServerDbContext>();//注入EF上下文
+                services.AddScoped<Chloe.IDbContext>((serviceProvider) =>
+                {
+                    return new Chloe.MySql.MySqlContext(new MySqlConnectionFactory(dbConnectionString));
+                });
             }
-            else if (dataBaseType == "MySql")
+            else if (dataBaseType == "PostgreSQL")
             {
-                services.AddSingleton<IDbContextCore, MySqlDbContext>();//注入EF上下文
+                services.AddScoped<Chloe.IDbContext>((serviceProvider) =>
+                {
+                    return new Chloe.PostgreSQL.PostgreSQLContext(new PostgreSqlConnectionFactory(dbConnectionString)) { ConvertToLowercase = false };
+                });
             }
             else
             {
@@ -143,8 +169,8 @@ namespace Identification.API
 
             #region 各种注入
             services.AddSingleton(Configuration)//注入Configuration，ConfigHelper要用
-                //.AddScopedAssembly("Auth.IRespositories", "Auth.Respositories")//注入服务
-                //.AddScopedAssembly("Auth.IServices", "Auth.Services")//注入服务
+                .AddScopedAssembly("Identification.IRepositories", "Identification.Repositories")
+                .AddScopedAssembly("Auth.IServices", "Auth.Services")
                 ;
             #endregion
 

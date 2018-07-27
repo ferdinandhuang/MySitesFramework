@@ -268,7 +268,7 @@ namespace Framework.Core.DbContextCore.CodeFirst
         /// <param name="destinationTableName"></param>
         public virtual void BulkInsert<T>(IList<T> entities, string destinationTableName = null) where T : BaseModel
         {
-            if (!Database.IsSqlServer() && !Database.IsMySql())
+            if (!Database.IsSqlServer() /*&& !Database.IsMySql()*/)
                 throw new NotSupportedException("This method only supports for SQL Server or MySql.");
         }
 

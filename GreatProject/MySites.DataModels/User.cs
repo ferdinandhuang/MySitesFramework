@@ -1,7 +1,7 @@
 ﻿using Framework.Core.Models;
 using MySites.Common.Enum;
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
+using Chloe.Annotations;
 
 namespace MySites.DataModels
 {
@@ -33,5 +33,13 @@ namespace MySites.DataModels
         /// 用户类型
         /// </summary>
         public UserType Role { get; set; }
+
+        public User()
+        {
+            Name = "-";
+            Email = "-";
+            Phone = "-";
+            Role = UserType.Normal;
+        }
     }
 }

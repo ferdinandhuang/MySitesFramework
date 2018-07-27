@@ -49,5 +49,11 @@ namespace MySites.DTO
 
             return TinyMapper.Map<UserDTO>(user);
         }
+        public static User DTO2User(this UserDTO userDTO)
+        {
+            TinyMapper.Bind<UserDTO, User>();
+
+            return TinyMapper.Map<User>(userDTO);
+        }
     }
 }

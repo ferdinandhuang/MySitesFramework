@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Auth.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identification.API.Controllers
@@ -10,10 +11,18 @@ namespace Identification.API.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private IUserService ss;
+        public ValuesController(IUserService _ss)
+        {
+            ss= _ss;
+        }
+
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            ss.SearchUserByPwd("","");
             return Ok();
         }
 
